@@ -80,6 +80,10 @@ public class BasedActor : MonoBehaviour
     public void MoveToVal(float MoveVector)
     {
         Crigid.velocity = new Vector2(MoveVector,Crigid.velocity.y);
+    }
+    public void RemoveXAxisVelocity()
+    {
+        Crigid.velocity = new Vector2(0,Crigid.velocity.y);
 
     }
     public virtual void ApplyDataOnInGameEditor()

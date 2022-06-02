@@ -21,6 +21,8 @@ public class CharacterBased : BasedActor
     public ACTION action;          
     public ACTION oldAction;        
 
+    public STATE State;       
+    
 
      public override void Init()
     {
@@ -37,23 +39,44 @@ public class CharacterBased : BasedActor
     }
     public void DoChangeAnim()
     {
+        if(doMotion.Limit == ACTION_LIMIT.ONLY_TIME)
+        {
+            doMotion.isActiveMotion = true;
+            StartCoroutine(DoActionOfCorutine(doMotion));
+        }
+        else
+        {
         spineObject.ChangeAnim(doMotion);
+        }
     }
     protected virtual void Update()
     {
         if(oldAction != action)
         {
-            if(doMotion.isCanDoOther)
+            if(doMotion.Limit == ACTION_LIMIT.FREE)
             {
                 oldAction = action;
+                
                 SetMotion(action);
-                spineObject.ChangeAnim(doMotion);
+                DoChangeAnim();
             }
-            else
+            else if(doMotion.Limit == ACTION_LIMIT.ONLY_RELASE)
             {
-                action = oldAction;
+                if(doMotion.CanConnectMotion == action)
+                {
+                    SetMotion(action);
+                    oldAction = action;
+                    DoChangeAnim();
+                }
             }
+            
         }
+        else 
+        {
+            
+        }
+        
+        
     }
     
         public virtual void DoTag()
@@ -68,12 +91,23 @@ public class CharacterBased : BasedActor
     }
     protected virtual IEnumerator DoActionOfCorutine(Motion CurMotion) 
     {
-        yield return new WaitForSeconds(doMotion.delay.Max);
+        spineObject.ChangeAnim(CurMotion);
+        if(CurMotion.Limit == ACTION_LIMIT.ONLY_TIME)
+        {
+            yield return new WaitForSecondsRealtime(CurMotion.delay.Max);
+            EndMotion(CurMotion);
+        }
+        else if(CurMotion.Limit == ACTION_LIMIT.RELASE_AND_TIME)
+        {
+            yield return new WaitForSecondsRealtime(doMotion.delay.Max);
+        }
     }
-    protected virtual void EndMotion()
+    protected virtual void EndMotion(Motion CurMotion)
     {
-        action = ACTION.IDLE;
-        SetMotion(action);
+        Debug.Log("End");
+        SetMotion(CurMotion.EndAction);
+        CurMotion.isActiveMotion =false;
+        action = CurMotion.EndAction;
     } 
     public override void ApplyDataOnInGameEditor()
     {
@@ -88,5 +122,10 @@ public struct Motion
     public Gauge delay;
     public bool isCanDoOther;
     public bool isLoop;
+    public bool isReverse;
     public AnimationReferenceAsset animset;
+    public ACTION CanConnectMotion;
+    public ACTION EndAction;
+    public ACTION_LIMIT Limit;
+    public bool isActiveMotion;
 }

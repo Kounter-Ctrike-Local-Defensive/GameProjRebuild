@@ -29,15 +29,18 @@ public partial class PlayerAbleCharacter : CharacterBased
     [Range(0,3)]
     public int DEBUG_JUMP_COUNT;
 
+    [SerializeField]
     Gauge JumpCount;    
 
+    [Range(0f,5)]
     public float gravityScale;              //플레이어 중력값
-    
+    [Range(0,30)]
+    public float MaxDownVelocity;              //최대 낙하속도
     public Dashinfo Dash;
-    public STATE State;                     //플레이어의 외부 상태입니다.
-                                            //(공중에 뜸, 벽타기 중, 땅을 딛음)
+    
     public static float attackDelay;       //플레이어의 연속 공격을 판단할 함수.
     public static int attackLev;           //플레이어의 연속 공격 횟수
+
 
     [SerializeField]
     BODY body;
@@ -48,7 +51,8 @@ public partial class PlayerAbleCharacter : CharacterBased
 
 
         State = STATE.STAND;
-
+        JumpCount.Max = DEBUG_JUMP_COUNT;
+        SetMotion(ACTION.IDLE);
         ReSetJumpCount();
     }
 
@@ -57,36 +61,73 @@ public partial class PlayerAbleCharacter : CharacterBased
     protected override void Update()
     {
         base.Update();
-
-        if(Input.anyKey)
+        if(doMotion.isCanDoOther)
         {
-            if (Manager.Key.Inst.GetActionDown(INPUT.JUMP) && doMotion.isCanDoOther)
+            if(Input.anyKey)
             {
-                
-                jump();
-            }
+                if (Manager.Key.Inst.GetActionDown(INPUT.JUMP))
+                {
+                    jump();
+                }
 
+                if(Manager.Key.Inst.GetAction(INPUT.LOOK_UP))
+                {
+                    lookup(true);
+                }
+                
+                if(Manager.Key.Inst.GetAction(INPUT.LOOK_DOWN))
+                {
+                    lookdown(true);
+                }
+                
+                
+            }
+            else
+            {
+                idle();
+            }
         }
         else
-        {
-            idle();
+        {   
+            if(action == ACTION.LOOK_DOWN && !Manager.Key.Inst.GetAction(INPUT.LOOK_DOWN))
+            {
+                lookdown(false);
+            }
+            if(action == ACTION.LOOK_UP && !Manager.Key.Inst.GetAction(INPUT.LOOK_UP))
+            {
+                lookup(false);
+            }
         }
+        
 
     }
 
     protected virtual void FixedUpdate()
     {
-        if (Input.anyKey)
+        
+        if(doMotion.isCanDoOther)
         {
-            if(Manager.Key.Inst.GetAction(INPUT.LEFT) && !Manager.Key.Inst.GetAction(INPUT.RIGHT))
+            if (Input.anyKey)
             {
-                SetLookDir(ISLOOK.LEFT);
-                walk();
+                if(Manager.Key.Inst.GetAction(INPUT.LEFT) && !Manager.Key.Inst.GetAction(INPUT.RIGHT))
+                {
+                    SetLookDir(ISLOOK.LEFT);
+                    walk();
+                }
+                if(Manager.Key.Inst.GetAction(INPUT.RIGHT) && !Manager.Key.Inst.GetAction(INPUT.LEFT))
+                {
+                    SetLookDir(ISLOOK.RIGHT);
+                    walk();
+                }
             }
-            if(Manager.Key.Inst.GetAction(INPUT.RIGHT) && !Manager.Key.Inst.GetAction(INPUT.LEFT))
+        }
+        
+        if(State == STATE.FLOAT)
+        {
+            Crigid.AddForce(Vector2.down*gravityScale*Time.deltaTime);
+            if(Crigid.velocity.y < -MaxDownVelocity)
             {
-                SetLookDir(ISLOOK.RIGHT);
-                walk();
+                Crigid.velocity = new Vector2(Crigid.velocity.x,-MaxDownVelocity);
             }
         }
     }
@@ -170,6 +211,7 @@ public partial class PlayerAbleCharacter: CharacterBased
         if(State != STATE.FLOAT)
         {
             action = ACTION.IDLE;
+
         } 
     }
 
@@ -188,8 +230,7 @@ public partial class PlayerAbleCharacter: CharacterBased
             {
                 JumpCount.Val--;
             }
-            Crigid.AddForce(Vector2.up * body.JumpPower * Time.deltaTime * 10, ForceMode2D.Impulse);
-            Crigid.velocity = new Vector3(Crigid.velocity.x, body.JumpPower);
+            Crigid.velocity = new Vector2(Crigid.velocity.x, body.JumpPower);
             
         }
 
@@ -240,6 +281,25 @@ public partial class PlayerAbleCharacter: CharacterBased
     public virtual void TargetTag() 
     {
 
+    }
+
+    public virtual void lookup(bool val)
+    {
+        if(val)
+            action = ACTION.LOOK_UP;
+        else
+        {
+            action = ACTION.RELASE_UP;
+        }
+    }
+    public virtual void lookdown(bool val)
+    {
+        if(val)
+            action = ACTION.LOOK_DOWN;
+        else
+        {
+            action = ACTION.RELASE_DOWN;
+        }
     }
 
     protected virtual void EndMotion()

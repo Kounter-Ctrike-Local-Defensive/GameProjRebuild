@@ -1,5 +1,5 @@
 #if UNITY_EDITOR
-
+using System.Threading.Tasks; 
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,6 +33,7 @@ namespace Rito.UnityLibrary.EditorPlugins
         private GUILayoutOption ObjectWidthOption;
         private GUILayoutOption ObjectMinusButtonWidthOption;
 
+        private static bool repaint;
         private static readonly Color GreenColor = Color.green;
         private static readonly Color RedColor = Color.red * 2f;
         private static readonly Color HeaderColorA = new Color(4.0f, 5.0f, 4.0f, 4.0f);
@@ -141,6 +142,7 @@ namespace Rito.UnityLibrary.EditorPlugins
             NextSpace(8f);
         }
 
+
         GUI.backgroundColor = oldBgColor;
         GUI.contentColor = oldcntColor;
         }
@@ -167,8 +169,10 @@ namespace Rito.UnityLibrary.EditorPlugins
                 {
                     GUI.contentColor = Color.white;
                     GUI.backgroundColor = pms._activated ? GreenColor : RedColor;
-                    if (GUILayout.Button("Activated", HalfButtonWidthOption))
+                    if (repaint||GUILayout.Button("Activated", HalfButtonWidthOption))
                     {
+                        if(repaint)
+                            repaint=false;
                         Undo.RecordObject(pms, "Change Activated Value");
                         pms._activated = !pms._activated;
                     }
@@ -185,16 +189,9 @@ namespace Rito.UnityLibrary.EditorPlugins
                 NextY(22f);
             }
         }
-        public static void UpdateColor(bool Data)
+        public static void UpdateColor()
         {
-            if (foldoutA)
-            {
-                using (new EditorGUILayout.HorizontalScope())
-                {
-                    GUI.contentColor = Color.white;
-                    GUI.backgroundColor = !Data ? GreenColor : RedColor;
-                }
-            }
+            repaint=true;
         }
         private void DrawFunctions()
         {

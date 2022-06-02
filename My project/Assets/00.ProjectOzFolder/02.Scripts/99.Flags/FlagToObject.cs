@@ -17,7 +17,17 @@ public enum INPUT   //캐릭터가 실행하려는 행동입니다.
     //실제로 쓰이지 않습니다.
     , ATTACK,ATTACK_CHARGE,END
 }
+public enum ACTION_LIMIT
+{
+    FREE,
+    ONLY_TIME,
+    ONLY_RELASE,
+    RELASE_AND_TIME,
+    PRESS_AND_TIME,
+    RELASE_OR_TIME,
+    PRESS_OR_TIME
 
+}
 public enum STATE
     {STAND,FLOAT,WALLHANG,HIT}
 
@@ -27,7 +37,7 @@ public enum STATE
     public enum ACTION//캐릭터가 실제로 실행하는 행동입니다.
     {
     IDLE,WALK,JUMP,INTERACTION
-    ,CLIMB_WALL,DASH,JUMP_DOUBLE,LOOK_UP,LOOK_DOWN,DOTAG,TARGETTAG,ISCOMBAT
+    ,CLIMB_WALL,DASH,JUMP_DOUBLE,LOOK_UP,LOOK_DOWN,RELASE_UP,RELASE_DOWN,DOTAG,TARGETTAG,ISCOMBAT
     //ISCOMBAT 은 ACTION ENUM 에서 ISCOMBAT 보다 높은 열거형만 전투에 관련됨을 나타냅니다.
     //실제로 쓰이지 않습니다.
     ,ATTACK_A,ATTACK_B,ATTACK_C,ATTACK_CHARGE,HIT,END

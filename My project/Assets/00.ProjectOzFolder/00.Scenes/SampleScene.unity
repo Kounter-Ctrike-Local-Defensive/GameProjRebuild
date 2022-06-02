@@ -219,6 +219,7 @@ GameObject:
   - component: {fileID: 999286189}
   - component: {fileID: 999286188}
   - component: {fileID: 999286192}
+  - component: {fileID: 999286193}
   m_Layer: 0
   m_Name: Dorothy
   m_TagString: Untagged
@@ -238,14 +239,14 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
+  m_Mass: 0.0001
+  m_LinearDrag: 5
   m_AngularDrag: 0
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: b2e3780c958a65c478ff9ad88220da95, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &999286189
 BoxCollider2D:
@@ -332,7 +333,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 999286187}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.013432, y: 1.48, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1729389853}
@@ -352,9 +353,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   applySpeed: 5
+  AutoSave: 1
   spineObject: {fileID: 1729389849}
   Motions:
-    g_InspectorKeys: 00000000010000000200000003000000
+    g_InspectorKeys: 000000000100000002000000030000000700000008000000090000000a000000
     g_InspectorValues:
     - delay:
         Max: 0
@@ -362,56 +364,147 @@ MonoBehaviour:
         Val: 0
       isCanDoOther: 1
       isLoop: 1
+      isReverse: 0
       animset: {fileID: 11400000, guid: f34621bc68894504cbe3aa597a8de7ce, type: 2}
+      CanConnectMotion: 19
+      EndAction: 0
+      Limit: 0
+      isActiveMotion: 0
     - delay:
         Max: 0
         Min: 0
         Val: 0
       isCanDoOther: 1
       isLoop: 1
+      isReverse: 0
       animset: {fileID: 11400000, guid: 76db75a2b5a477346a28e144e77be7a2, type: 2}
+      CanConnectMotion: 19
+      EndAction: 0
+      Limit: 0
+      isActiveMotion: 0
     - delay:
         Max: 0
         Min: 0
         Val: 0
       isCanDoOther: 1
       isLoop: 1
+      isReverse: 0
       animset: {fileID: 11400000, guid: c5dc4625dd3fd274a8bc939bf7784b00, type: 2}
+      CanConnectMotion: 19
+      EndAction: 0
+      Limit: 0
+      isActiveMotion: 0
     - delay:
         Max: 0
         Min: 0
         Val: 0
       isCanDoOther: 1
       isLoop: 1
+      isReverse: 0
       animset: {fileID: 11400000, guid: f34621bc68894504cbe3aa597a8de7ce, type: 2}
+      CanConnectMotion: 19
+      EndAction: 0
+      Limit: 0
+      isActiveMotion: 0
+    - delay:
+        Max: 0
+        Min: 0
+        Val: 0
+      isCanDoOther: 0
+      isLoop: 0
+      isReverse: 0
+      animset: {fileID: 11400000, guid: 203fd4526bbca054e8bc0e0a3b4e18e1, type: 2}
+      CanConnectMotion: 9
+      EndAction: 0
+      Limit: 2
+      isActiveMotion: 0
+    - delay:
+        Max: 0
+        Min: 0
+        Val: 0
+      isCanDoOther: 0
+      isLoop: 0
+      isReverse: 0
+      animset: {fileID: 11400000, guid: 732d96fa5df76474889df43325544a16, type: 2}
+      CanConnectMotion: 10
+      EndAction: 0
+      Limit: 2
+      isActiveMotion: 0
+    - delay:
+        Max: 0.33
+        Min: 0
+        Val: 0
+      isCanDoOther: 0
+      isLoop: 0
+      isReverse: 1
+      animset: {fileID: 11400000, guid: 203fd4526bbca054e8bc0e0a3b4e18e1, type: 2}
+      CanConnectMotion: 7
+      EndAction: 0
+      Limit: 1
+      isActiveMotion: 0
+    - delay:
+        Max: 0.33
+        Min: 0
+        Val: 0
+      isCanDoOther: 0
+      isLoop: 0
+      isReverse: 1
+      animset: {fileID: 11400000, guid: 732d96fa5df76474889df43325544a16, type: 2}
+      CanConnectMotion: 8
+      EndAction: 0
+      Limit: 1
+      isActiveMotion: 0
   doMotion:
     delay:
       Max: 0
       Min: 0
       Val: 0
-    isCanDoOther: 0
-    isLoop: 0
-    animset: {fileID: 0}
+    isCanDoOther: 1
+    isLoop: 1
+    isReverse: 0
+    animset: {fileID: 11400000, guid: f34621bc68894504cbe3aa597a8de7ce, type: 2}
+    CanConnectMotion: 19
+    EndAction: 0
+    Limit: 0
+    isActiveMotion: 0
   action: 0
   oldAction: 0
-  HP: 2.72
-  DEBUG_JUMP_POWER: 56.2
-  DEBUG_WALK_SPEED: 56.6
-  DEBUG_MULTI_JUMP_WALK: 0.264
-  JumpCount:
-    Max: 0
-    Min: 0
-    Val: 0
-  gravityScale: 0
-  canDash: 0
-  dashTimer: 0
-  dashForce: 0
-  dashCoolTime: 0
   State: 0
+  DEBUG_JUMP_POWER: 42.8
+  HP: 4.05
+  DEBUG_WALK_SPEED: 15.9
+  DEBUG_MULTI_JUMP_WALK: 0.5
+  DEBUG_JUMP_COUNT: 2
+  JumpCount:
+    Max: 2
+    Min: 0
+    Val: 2
+  gravityScale: 1.28
+  MaxDownVelocity: 7.4
+  Dash:
+    canDash: 0
+    applyTime: 0
+    applyforce: 0
+    coolTime: 0
   body:
-    WalkSpeed: 5
-    DashSpeed: 5
-    JumpPower: 5
+    WalkSpeed: 15.9
+    DashSpeed: 0.99
+    JumpPower: 42.8
+--- !u!114 &999286193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 999286187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 303b841668074fa4d9ee4fd00846e7ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _alwaysOnTop: 1
+  _activated: 1
+  _targetList: []
 --- !u!1 &1659303537
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,7 +519,7 @@ GameObject:
   - component: {fileID: 1659303541}
   m_Layer: 0
   m_Name: Square
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

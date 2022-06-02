@@ -18,6 +18,9 @@ public class SpineObject : MonoBehaviour
                 return;
             SkeletonAnimation.state.SetAnimation(0,Anim.animset,Anim.isLoop);
             SkeletonAnimation.loop=Anim.isLoop;
-            SkeletonAnimation.timeScale = 1f;
+            if(Anim.isReverse)
+                SkeletonAnimation.timeScale = -1f;
+            else
+                SkeletonAnimation.timeScale = 1f;
     }
 }

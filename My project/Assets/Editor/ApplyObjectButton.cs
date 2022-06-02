@@ -13,12 +13,6 @@ public class ApplyObjectButton : Editor
         { 
             TargetActor.ApplyDataOnInGameEditor();
         }
-        if (GUILayout.Button("Save Object"))
-        { 
-            TargetActor.ApplyDataOnInGameEditor();
-            TargetActor.gameObject.GetComponent<Rito.UnityLibrary.EditorPlugins.PlayModeSaver>().AddTargetComponentToBasedActor(
-                TargetActor.GetComponent<BasedActor>());
-        }
         base.OnInspectorGUI();
         
     }

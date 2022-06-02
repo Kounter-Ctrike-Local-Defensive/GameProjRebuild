@@ -70,7 +70,6 @@ namespace Rito.UnityLibrary.EditorPlugins
             if(com == null) return;
             if(_targetList.Contains(com)) return;
             if(com is PlayModeSaver) return;
-
             _targetList.Add(com);
         }
         public void AddTargetComponentToBasedActor(Component com)
@@ -78,9 +77,8 @@ namespace Rito.UnityLibrary.EditorPlugins
             if(com == null) return;
             if(_targetList.Contains(com)) return;
             if(com is PlayModeSaver) return;
-            _activated = true;
             _targetList.Add(com);
-            Rito.UnityLibrary.EditorPlugins.PlayModeSaverEditor.UpdateColor(_activated);
+            PlayModeSaverEditor.UpdateColor();
         }
 
         /// <summary> 게임오브젝트 내의 모든 컴포넌트를 등록 </summary>

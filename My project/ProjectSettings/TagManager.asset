@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Floor
+  - Enemy
+  - Wall
+  - Debug
+  - CameraLimitBackGround
+  - InGameGaugae
+  - Area
   layers:
   - Default
   - TransparentFX
