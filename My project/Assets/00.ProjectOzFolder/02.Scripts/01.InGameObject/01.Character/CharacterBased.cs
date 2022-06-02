@@ -16,15 +16,69 @@ public class CharacterBased : BasedActor
     SpineObject spineObject;
 
     [SerializeField]
-    public MotionDict Motion;
-    
+    public MotionDict Motions;
+    public Motion doMotion;           //실제로 실행하는 모션입니다.
+    public ACTION action;          
+    public ACTION oldAction;        
+
+
      public override void Init()
     {
         base.Init();
-        SetSpeed(0);
         SetLookDir(ISLOOK.RIGHT);
+        oldAction = ACTION.IDLE;
+        action = ACTION.IDLE;
+        
     }
 
+    public void SetMotion(ACTION input)
+    {
+        doMotion = Motions[input];
+    }
+    public void DoChangeAnim()
+    {
+        spineObject.ChangeAnim(doMotion);
+    }
+    protected virtual void Update()
+    {
+        if(oldAction != action)
+        {
+            if(doMotion.isCanDoOther)
+            {
+                oldAction = action;
+                SetMotion(action);
+                spineObject.ChangeAnim(doMotion);
+            }
+            else
+            {
+                action = oldAction;
+            }
+        }
+    }
+    
+        public virtual void DoTag()
+    {
+        Crigid.velocity = Vector2.zero;
+        this.gameObject.SetActive(false);
+    }
+    public virtual void TargetTag() 
+    {
+        Crigid.velocity = Vector2.zero;
+        this.gameObject.SetActive(true);
+    }
+    protected virtual IEnumerator DoActionOfCorutine(Motion CurMotion) 
+    {
+        yield return new WaitForSeconds(doMotion.delay.Max);
+    }
+    protected virtual void EndMotion()
+    {
+        action = ACTION.IDLE;
+        SetMotion(action);
+    } 
+    public override void ApplyDataOnInGameEditor()
+    {
+        
+    } 
 }
 
 

@@ -10,7 +10,7 @@ public class ManagedMentBased<T> : MonoBehaviour where T : MonoBehaviour
     private static object _Lock = new object();
     private static T _Instance;
 
-    public static T Instance
+    public static T Inst
     {
         get
         {
@@ -54,7 +54,7 @@ public class ManagedMentBased<T> : MonoBehaviour where T : MonoBehaviour
         _ShuttingDown = true;
     }
 
-    protected virtual void Init()
+    public virtual void Init()
     {
 
     }

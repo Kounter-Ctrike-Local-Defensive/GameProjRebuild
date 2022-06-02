@@ -81,8 +81,6 @@ using System.Linq;
 
         public void OnAfterDeserialize()
         {
-            Debug.Log(this + string.Format("인스펙터 키 수 : {0} 값 수 : {1}", g_InspectorKeys.Count, g_InspectorValues.Count));
-
             //인스펙터의 Key Value가 KeyValuePair 형태를 띌 경우
             if (g_InspectorKeys.Count == g_InspectorValues.Count)
             {

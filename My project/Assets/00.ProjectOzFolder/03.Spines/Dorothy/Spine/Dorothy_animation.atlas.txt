@@ -1,0 +1,55 @@
+Dorothy_animation.png
+	size: 352, 324
+	filter: Linear, Linear
+	pma: true
+Arm_left
+	bounds: 156, 5, 45, 74
+	offsets: 0, 0, 46, 74
+Arm_r
+	bounds: 278, 58, 26, 69
+	rotate: 90
+Cloth_Left
+	bounds: 271, 10, 45, 72
+	offsets: 0, 0, 46, 72
+	rotate: 90
+Cloth_Right
+	bounds: 229, 57, 47, 76
+Face
+	bounds: 2, 163, 159, 152
+	offsets: 0, 1, 159, 154
+	rotate: 90
+Face_2
+	bounds: 2, 2, 159, 152
+	offsets: 0, 1, 159, 154
+	rotate: 90
+Hair_left
+	bounds: 278, 114, 72, 94
+	offsets: 0, 0, 73, 94
+Hair_right
+	bounds: 278, 210, 61, 112
+	offsets: 0, 1, 61, 113
+Leg_Left
+	bounds: 203, 2, 39, 66
+	offsets: 0, 23, 39, 89
+	rotate: 90
+Leg_right
+	bounds: 278, 86, 26, 70
+	offsets: 2, 0, 34, 71
+	rotate: 90
+Ribbon
+	bounds: 156, 81, 71, 52
+dress
+	bounds: 156, 214, 120, 108
+	offsets: 0, 0, 121, 108
+dress2
+	bounds: 156, 135, 77, 102
+	offsets: 1, 0, 78, 102
+	rotate: 90
+foot_l
+	bounds: 260, 178, 34, 16
+	offsets: 2, 3, 37, 19
+	rotate: 90
+foot_r
+	bounds: 203, 43, 36, 18
+	offsets: 0, 1, 37, 19
+	rotate: 90

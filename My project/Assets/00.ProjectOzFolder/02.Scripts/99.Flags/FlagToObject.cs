@@ -37,10 +37,14 @@ public enum STATE
     {
     DOROTHY=0,LION,SCARECROW,WOODCUTTER
     }
+[System.Serializable]
     public struct BODY
     {
+    [Range(0,10)]
     public float WalkSpeed;
+    [Range(0,10)]
     public float DashSpeed;
+    [Range(0,10)]
     public float JumpPower;
     }
 

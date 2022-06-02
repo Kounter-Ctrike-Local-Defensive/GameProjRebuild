@@ -5,10 +5,6 @@ using UnityEngine;
 
 static class Tags
 {
-    public const string Dorothy = "Dorothy";
-    public const string Lion = "Lion";
-    public const string Scarecrow = "Scarecrow";
-    public const string Woodcutter = "Woodcutter";
     public const string Enemy = "Enemy";
     
     public const string Floor = "Floor";
@@ -24,3 +20,14 @@ static class Layer
 {
     public const float DefaultCamZaxis = 20f;
 }
+
+static class AXIS{
+    public const string Horizontal = "Horizontal";
+}
+public enum ViewOption
+    {
+        POSTION_AND_SIZE,
+        SPEED,
+        MOTION,
+        ALL
+    }
