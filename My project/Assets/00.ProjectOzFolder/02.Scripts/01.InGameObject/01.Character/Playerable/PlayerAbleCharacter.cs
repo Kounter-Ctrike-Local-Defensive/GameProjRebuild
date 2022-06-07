@@ -283,6 +283,17 @@ public partial class PlayerAbleCharacter: CharacterBased
 
     }
 
+
+
+
+
+
+
+
+
+
+
+
     public virtual void lookup(bool val)
     {
         if(val)

@@ -14,11 +14,12 @@ namespace Manager
             Manager.Key.Inst.Init();
             Manager.Config.Inst.Init();
             Manager.Area.Inst.Init();
+            Manager.Player.Inst.Init();
         }
 
         void Update()
         {
-            
+            Manager.Player.Inst.curPlayer = Player;
         }
         
     }

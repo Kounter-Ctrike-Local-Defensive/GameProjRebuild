@@ -65,12 +65,12 @@ public class BasedActor : MonoBehaviour
 
     public void MoveToForceX(float MoveVector,ForceMode2D Mode = ForceMode2D.Force)
     {
-        Crigid.AddForce(Vector2.right * MoveVector * applySpeed ,Mode);
-        if(Crigid.velocity.x > MoveVector)
+        Crigid.AddForce(Vector2.right * MoveVector *Time.deltaTime ,Mode);
+        if(Crigid.velocity.x > MoveVector && MoveVector > 0)
             {
                 Crigid.velocity = new Vector2(MoveVector,Crigid.velocity.y);
             }
-        else if(Crigid.velocity.x < -MoveVector)
+        else if(Crigid.velocity.x < -MoveVector&& MoveVector< 0)
             {
                 Crigid.velocity = new Vector2(MoveVector,Crigid.velocity.y);
 
