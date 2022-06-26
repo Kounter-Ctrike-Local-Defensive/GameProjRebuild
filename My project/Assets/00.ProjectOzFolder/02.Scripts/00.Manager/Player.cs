@@ -12,6 +12,7 @@ namespace Manager
         public bool hasLion = false;
         public bool hasWoodcutter = true; //캐릭터 획득 유무
         public bool bCanTag {get;set;}           //태그 가능한 상황임을 나타냅니다.
+    
         public int attackLev{get;set;}
 
         public GameObject curPlayer;
