@@ -22,7 +22,7 @@ public class CharacterBased : BasedActor
     public ACTION oldAction;        
 
     public STATE State;       
-    
+
 
      public override void Init()
     {
@@ -57,7 +57,6 @@ public class CharacterBased : BasedActor
             if(doMotion.Limit == ACTION_LIMIT.FREE)
             {
                 oldAction = action;
-                Debug.Log(action);
                 SetMotion(action);
                 DoChangeAnim();
             }

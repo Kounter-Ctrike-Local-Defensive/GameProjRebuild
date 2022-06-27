@@ -29,8 +29,10 @@ public class Dorothy : PlayerAbleCharacter
         {
             StartCoroutine(DashMove(action));
             StartCoroutine(DashCool());
+            Crigid.velocity = Vector2.zero;
             if (transform.rotation.y == 0)
             {
+                
                 Crigid.AddForce(Vector2.right * mDash.applyforce*Time.deltaTime, ForceMode2D.Impulse);
             }
             else

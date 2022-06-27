@@ -65,7 +65,9 @@ public class BasedActor : MonoBehaviour
 
     public void MoveToForceX(float MoveVector,ForceMode2D Mode = ForceMode2D.Impulse)
     {
-        Crigid.AddForce(Vector2.right * MoveVector *Time.deltaTime ,Mode);
+        Vector3 Force = new Vector3 (MoveVector*Time.deltaTime * 0.001f,0,0);
+        Crigid.AddForce(Force,Mode);
+        if(false){
         if(Crigid.velocity.x > MoveVector && MoveVector > 0)
             {
                 Crigid.velocity = new Vector2(MoveVector,Crigid.velocity.y);
@@ -75,11 +77,11 @@ public class BasedActor : MonoBehaviour
                 Crigid.velocity = new Vector2(MoveVector,Crigid.velocity.y);
 
             }
+        }
 
     }
     public void MoveToVal(float MoveVector)
     {
-        Debug.Log(Crigid.velocity.y);
         Crigid.velocity = new Vector2(MoveVector,Crigid.velocity.y);
     }
     public void RemoveXAxisVelocity()

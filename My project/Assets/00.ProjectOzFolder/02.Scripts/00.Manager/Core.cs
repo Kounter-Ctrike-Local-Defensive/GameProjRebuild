@@ -7,7 +7,7 @@ namespace Manager
     {
 
         [SerializeField]
-        GameObject Player;
+        GameObject InitPlayer;
 
         void Start()
         {
@@ -19,7 +19,7 @@ namespace Manager
 
         void Update()
         {
-            Manager.Player.Inst.curPlayer = Player;
+            Manager.Player.Inst.SettingPlayerObj(InitPlayer);
         }
         
     }

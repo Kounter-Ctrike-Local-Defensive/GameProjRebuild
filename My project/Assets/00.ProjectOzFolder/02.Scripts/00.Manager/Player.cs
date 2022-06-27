@@ -16,6 +16,7 @@ namespace Manager
         public int attackLev{get;set;}
 
         public GameObject curPlayer;
+        public PlayerAbleCharacter curPlayerScript;
 
         void Start()
         {
@@ -29,6 +30,11 @@ namespace Manager
         {
             
         }
+        public void SettingPlayerObj(GameObject Obj)
+        {
+            curPlayer = Obj;
+            curPlayerScript = Obj.GetComponent<PlayerAbleCharacter>();
+        }
         public void PlayerDoTag(string Tag)
         {
             if (bCanTag)
@@ -40,7 +46,6 @@ namespace Manager
         {
             
         }
-
 
     }
 }

@@ -42,6 +42,20 @@ public partial class PlayerAbleCharacter : CharacterBased
     public static int attackLev;           //플레이어의 연속 공격 횟수
 
     public bool bOnWall;                    //플레이어가 벽에 붙었는지 확인하는 변수
+    public bool OnWallLeft;
+    public bool OnWallRight;
+    
+    [SerializeField]
+    Gauge MaxBufferJumpTime;
+
+    [SerializeField]
+    Gauge WallHangWalkTime;
+    bool WaitWallHangEndWalkTime;
+    bool WaitJumpBuffer;
+
+    bool WaitWalk;
+
+    Vector2 WallHangPos;
 
     [SerializeField]
     BODY body;
@@ -55,6 +69,7 @@ public partial class PlayerAbleCharacter : CharacterBased
         JumpCount.Max = DEBUG_JUMP_COUNT;
         bOnWall=false;
         mDash.canDash=true;
+        WaitWalk=true;
         SetMotion(ACTION.IDLE);
         ReSetJumpCount();
 
@@ -65,23 +80,82 @@ public partial class PlayerAbleCharacter : CharacterBased
     protected override void Update()
     {
         base.Update();
+        if(action==ACTION.CLIMB_WALL)
+        {
+            if(mLookDir == ISLOOK.LEFT)
+            MoveToVal(-body.WalkSpeed);
+            else
+            {
+            MoveToVal(body.WalkSpeed);
+            }
+        }
         if(doMotion.isCanDoOther)
         {
+            if(WaitJumpBuffer)
+            {
+                MaxBufferJumpTime.Val += Time.deltaTime;
+                if(MaxBufferJumpTime.Val > MaxBufferJumpTime.Max)
+                {
+                    WaitJumpBuffer = false;
+                }
+            }
+            if(WaitWallHangEndWalkTime)
+            {
+                WallHangWalkTime.Val +=Time.deltaTime;
+                if(WallHangWalkTime.Val > WallHangWalkTime.Max)
+                {
+                    WaitWallHangEndWalkTime=false;
+                }
+            }
             if(Input.anyKey)
             {
                 if (Manager.Key.Inst.GetActionDown(INPUT.JUMP))
                 {
+                    if(bOnWall && State == STATE.WALLHANG)
+                    {
+                        State = STATE.FLOAT;
+                        jump();
+                        Crigid.velocity = new Vector2(Crigid.velocity.x, body.JumpPower);
+                        if(OnWallRight)
+                        {
+                            if(mLookDir == ISLOOK.RIGHT)
+                                Crigid.velocity = new Vector2(-body.WalkSpeed, Crigid.velocity.y);
+                            else
+                            {
+                                Crigid.velocity = new Vector2(body.WalkSpeed, Crigid.velocity.y);
+                            }
+                        }
+                        bOnWall=false;
+                        action = ACTION.WALK;
+                        WallHangWalkTime.Val = 0;
+                        WaitWallHangEndWalkTime=true;
+                        StartCoroutine(WalkCool(WallHangWalkTime.Max*0.5f));
+                    }
+                    else if(bOnWall && State == STATE.FLOAT)
+                    {
+                        ReSetJumpCount();
+                        action = ACTION.CLIMB_WALL;
+                        State = STATE.WALLHANG;
+                    }
+                    else
+                    {
                     jump();
+                    }
+                    
+                    
+                    
                 }
 
                 if(Manager.Key.Inst.GetAction(INPUT.LOOK_UP))
                 {
                     lookup();
+                    Manager.MoveCam.Inst.LookUp = true;
                 }
                 
                 if(Manager.Key.Inst.GetAction(INPUT.LOOK_DOWN))
                 {
                     lookdown();
+                    Manager.MoveCam.Inst.LookDown = true;
                 }
                 if(Manager.Key.Inst.GetActionDown(INPUT.DASH))
                 {
@@ -90,11 +164,16 @@ public partial class PlayerAbleCharacter : CharacterBased
                 
                 
             }
+            else if(action == ACTION.CLIMB_WALL)
+            {
+
+            }
             else
             {
                 idle();
             }
         }
+        
         
 
     }
@@ -120,15 +199,18 @@ public partial class PlayerAbleCharacter : CharacterBased
                 
             }
         }
+
         
-        if(State == STATE.FLOAT && action != ACTION.DASH)
+        if(State == STATE.FLOAT && action != ACTION.DASH && action !=ACTION.CLIMB_WALL && !WaitWallHangEndWalkTime)
         {
             Crigid.AddForce(Vector2.down * gravityScale*Time.deltaTime);
+            
             if(Crigid.velocity.y < -MaxDownVelocity)
             {
                 Crigid.velocity = new Vector2(Crigid.velocity.x,-MaxDownVelocity);
             }
         }
+        
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D other) 
@@ -137,12 +219,16 @@ public partial class PlayerAbleCharacter : CharacterBased
         if(other.transform.tag == Tags.Wall)
         {
             bOnWall=true;
-            ReSetJumpCount();
         }
         else if (other.transform.tag == Tags.Floor)
         {
             State = STATE.STAND;
             ReSetJumpCount();
+            if(WaitJumpBuffer)
+            {
+                jump();
+                WaitJumpBuffer=false;
+            }
         }
         
     }
@@ -160,7 +246,11 @@ public partial class PlayerAbleCharacter : CharacterBased
         {
             bOnWall=false;
             if(State != STATE.STAND)
-            JumpCount.Val--;
+            {
+                ReSetJumpCount();
+                JumpCount.Val--;
+                State = STATE.FLOAT;
+            }
         }
         
 
@@ -199,7 +289,7 @@ public partial class PlayerAbleCharacter: CharacterBased
     protected virtual IEnumerator DashMove(ACTION _action)
     {
         Crigid.gravityScale = 0;
-        Crigid.velocity = Vector2.zero;
+        
 
         //if (State == STATE.FLOAT)
             //StartCoroutine(MoveEffect.Instance.EffectContinue(4, transform.position));
@@ -216,6 +306,12 @@ public partial class PlayerAbleCharacter: CharacterBased
         Debug.Log("End");
 
     }
+    protected virtual IEnumerator WalkCool(float Time)
+    {
+        WaitWalk = false;
+        yield return new WaitForSecondsRealtime(Time);
+        WaitWalk = true;
+    }
 
     protected virtual IEnumerator DashCool()
     {
@@ -228,24 +324,24 @@ public partial class PlayerAbleCharacter: CharacterBased
         if(State != STATE.FLOAT && action != ACTION.DASH)
         {
             action = ACTION.IDLE;
+            Crigid.velocity = new Vector2(0,Crigid.velocity.y);
         }
     }
 
     public virtual void walk() 
     {
+        
         float MoveX = Input.GetAxisRaw(AXIS.Horizontal) * body.WalkSpeed;
-        MoveToForceX(MoveX);
-        action = ACTION.WALK;
-
-        if(bOnWall)
+        if(WaitWalk)
         {
-            Crigid.AddForce(Vector2.down * gravityScale*Time.deltaTime);
-            if(Crigid.velocity.y < -MaxDownVelocity)
-            {
-                Debug.Log(Crigid.velocity.y);
-                Crigid.velocity = new Vector2(Crigid.velocity.x,-MaxDownVelocity);
-            }
+            if(bOnWall)
+                MoveToForceX(MoveX);
+            else
+                MoveToVal(MoveX);
+            action = ACTION.WALK;
         }
+            
+        
     }
     protected virtual void dash()
     {
@@ -258,9 +354,16 @@ public partial class PlayerAbleCharacter: CharacterBased
             if(State == STATE.FLOAT)
             {
                 JumpCount.Val--;
+                
             }
             Crigid.velocity = new Vector2(Crigid.velocity.x, body.JumpPower);
-            
+            action=ACTION.JUMP;
+            Debug.Log(Crigid.velocity);
+        }
+        else
+        {
+            WaitJumpBuffer = true;
+            MaxBufferJumpTime.Val=0;
         }
 
             //if (JumpCount.Val <= JumpCount.Max - 1 && JumpCount.Max > 0)
