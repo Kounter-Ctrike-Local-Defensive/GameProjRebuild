@@ -119,7 +119,9 @@ public partial class PlayerAbleCharacter : CharacterBased
                         if(OnWallRight)
                         {
                             if(mLookDir == ISLOOK.RIGHT)
+                            {
                                 Crigid.velocity = new Vector2(-body.WalkSpeed, Crigid.velocity.y);
+                            }
                             else
                             {
                                 Crigid.velocity = new Vector2(body.WalkSpeed, Crigid.velocity.y);
