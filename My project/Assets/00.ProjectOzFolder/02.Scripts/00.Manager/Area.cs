@@ -6,7 +6,13 @@ namespace Manager
 {
 public class Area : ManagedMentBased<Area>
 {
-    // Start is called before the first frame update
+
+    public MultiLayers Target;
+
+    public void ChangeTargetArea(GameObject TargetArea)
+    {
+        Target = TargetArea.GetComponent<MultiLayers>();
+    }
     void Start()
     {
         
@@ -15,7 +21,7 @@ public class Area : ManagedMentBased<Area>
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
 }

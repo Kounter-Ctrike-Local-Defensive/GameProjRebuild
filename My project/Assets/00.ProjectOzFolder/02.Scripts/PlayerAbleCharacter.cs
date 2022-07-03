@@ -257,12 +257,23 @@ public partial class PlayerAbleCharacter : CharacterBased
         
 
     }
+
+    protected void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == Tags.AreaTrigger)
+        {
+            Manager.Area.Inst.ChangeTargetArea(other.gameObject);
+        }
+    }
+
+
     public override void ApplyDataOnInGameEditor()
     {
         base.ApplyDataOnInGameEditor();
         body.WalkSpeed = DEBUG_WALK_SPEED;
         body.JumpPower = DEBUG_JUMP_POWER;
     } 
+    
     
 }
 

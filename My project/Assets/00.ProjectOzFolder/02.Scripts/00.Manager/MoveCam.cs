@@ -78,7 +78,7 @@ namespace Manager
             {
                 if (EnableT)
                 {
-                    //LayerMoveManageMent.Instance.UpdateScroll(0, Player.transform.position.y - (transform.position.y + CameraMarginSizeY * 0.5f + CameraMarginPosY), 0);
+                    Area.Inst.Target.ScrollLayer(0, PlayerPos.y - (transform.position.y + CameraMarginSizeY * 0.5f + CameraMarginPosY));
                     transform.Translate(0,PlayerPos.y- (transform.position.y + CameraMarginSizeY * 0.5f + CameraMarginPosY), 0);
                 }
             }
@@ -86,7 +86,7 @@ namespace Manager
             {
                 if (EnableB)
                 {
-                    //LayerMoveManageMent.Instance.UpdateScroll(0, Player.transform.position.y - (transform.position.y - CameraMarginSizeY * 0.5f + CameraMarginPosY), 0);
+                    Area.Inst.Target.ScrollLayer(0, PlayerPos.y - (transform.position.y - CameraMarginSizeY * 0.5f + CameraMarginPosY));
                     transform.Translate(0, PlayerPos.y- (transform.position.y - CameraMarginSizeY * 0.5f + CameraMarginPosY), 0);
                 }
             }
@@ -96,7 +96,7 @@ namespace Manager
             {
                 if (EnableR)
                 {
-                    //LayerMoveManageMent.Instance.UpdateScroll(Player.transform.position.x - (transform.position.x + CameraMarginSizeX * 0.5f + CameraMarginPosX), 0, 0);
+                    Area.Inst.Target.ScrollLayer(PlayerPos.x - (transform.position.x + CameraMarginSizeX * 0.5f + CameraMarginPosX), 0);
                     transform.Translate(PlayerPos.x - (transform.position.x + CameraMarginSizeX * 0.5f + CameraMarginPosX), 0, 0);
                     if (-MaxMarginPosX < CameraMarginPosX)
                     {
@@ -110,7 +110,7 @@ namespace Manager
             {
                 if (EnableL)
                 {
-                    //LayerMoveManageMent.Instance.UpdateScroll(PlayerPos.x - (transform.position.x - CameraMarginSizeX * 0.5f + CameraMarginPosX), 0, 0);
+                    Area.Inst.Target.ScrollLayer(PlayerPos.x - (transform.position.x - CameraMarginSizeX * 0.5f + CameraMarginPosX), 0);
                     transform.Translate(PlayerPos.x - (transform.position.x - CameraMarginSizeX * 0.5f + CameraMarginPosX), 0, 0);
                     if (MaxMarginPosX > CameraMarginPosX)
                     {
