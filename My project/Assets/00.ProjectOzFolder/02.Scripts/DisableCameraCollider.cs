@@ -45,15 +45,15 @@ public class DisableCameraCollider : MonoBehaviour
             Manager.MoveCam.Inst.EnableL = true;
         }else if(R)
         {
-            Manager.MoveCam.Inst.EnableL = true;
+            Manager.MoveCam.Inst.EnableR = true;
         }
         else if(B)
         {
-            Manager.MoveCam.Inst.EnableL = true;
+            Manager.MoveCam.Inst.EnableB = true;
         }
         else if(T)
         {
-            Manager.MoveCam.Inst.EnableL = true;
+            Manager.MoveCam.Inst.EnableT = true;
         }
     }
 
@@ -63,8 +63,9 @@ public class DisableCameraCollider : MonoBehaviour
 
     }
     private void OnTriggerExit2D(Collider2D other) {
-        if(other.transform.tag == Tags.CameraLimitBackGround)
+        if(other.transform.tag == Tags.CameraLimitBackGround){
             Exit();
+        }
     }
 
 

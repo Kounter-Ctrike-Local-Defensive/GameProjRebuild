@@ -53,6 +53,8 @@ public partial class PlayerAbleCharacter : CharacterBased
     bool WaitWallHangEndWalkTime;
     bool WaitJumpBuffer;
 
+    bool Holding;
+    bool bOnFloor;
     bool WaitWalk;
 
     Vector2 WallHangPos;
@@ -68,8 +70,10 @@ public partial class PlayerAbleCharacter : CharacterBased
         State = STATE.STAND;
         JumpCount.Max = DEBUG_JUMP_COUNT;
         bOnWall=false;
+        bOnFloor=false;
         mDash.canDash=true;
         WaitWalk=true;
+        Holding=false;
         SetMotion(ACTION.IDLE);
         ReSetJumpCount();
 
@@ -107,8 +111,20 @@ public partial class PlayerAbleCharacter : CharacterBased
                     WaitWallHangEndWalkTime=false;
                 }
             }
+            
             if(Input.anyKey)
             {
+                if(Manager.Key.Inst.GetAction(INPUT.LOOK_UP))
+                    {
+                        lookup();
+                        Manager.MoveCam.Inst.LookUp = true;
+                    }
+                if(Manager.Key.Inst.GetAction(INPUT.LOOK_DOWN))
+                    {
+                        lookdown();
+                        Manager.MoveCam.Inst.LookDown = true;
+                    }
+                
                 if (Manager.Key.Inst.GetActionDown(INPUT.JUMP))
                 {
                     if(bOnWall && State == STATE.WALLHANG)
@@ -133,7 +149,7 @@ public partial class PlayerAbleCharacter : CharacterBased
                         WaitWallHangEndWalkTime=true;
                         StartCoroutine(WalkCool(WallHangWalkTime.Max*0.5f));
                     }
-                    else if(bOnWall && State == STATE.FLOAT)
+                    else if(bOnWall && State == STATE.FLOAT &&!bOnFloor)
                     {
                         ReSetJumpCount();
                         action = ACTION.CLIMB_WALL;
@@ -147,24 +163,11 @@ public partial class PlayerAbleCharacter : CharacterBased
                     
                     
                 }
-
-                if(Manager.Key.Inst.GetAction(INPUT.LOOK_UP))
-                {
-                    lookup();
-                    Manager.MoveCam.Inst.LookUp = true;
-                }
-                
-                if(Manager.Key.Inst.GetAction(INPUT.LOOK_DOWN))
-                {
-                    lookdown();
-                    Manager.MoveCam.Inst.LookDown = true;
-                }
                 if(Manager.Key.Inst.GetActionDown(INPUT.DASH))
                 {
                     dash();
                 }
-                
-                
+               
             }
             else if(action == ACTION.CLIMB_WALL)
             {
@@ -172,7 +175,16 @@ public partial class PlayerAbleCharacter : CharacterBased
             }
             else
             {
+                
                 idle();
+            }
+            if(Manager.Key.Inst.GetActionUp(INPUT.LOOK_UP))
+            {
+                lookup_relase();
+            }
+            if(Manager.Key.Inst.GetActionUp(INPUT.LOOK_DOWN))
+            {
+                lookdown_relase();
             }
         }
         
@@ -201,20 +213,40 @@ public partial class PlayerAbleCharacter : CharacterBased
                 
             }
         }
-
-        
-        if(State == STATE.FLOAT && action != ACTION.DASH && action !=ACTION.CLIMB_WALL && !WaitWallHangEndWalkTime)
+        if(State == STATE.FLOAT && action != ACTION.DASH)
         {
-            Crigid.AddForce(Vector2.down * gravityScale*Time.deltaTime);
-            
-            if(Crigid.velocity.y < -MaxDownVelocity)
+            if(action !=ACTION.CLIMB_WALL && !WaitWallHangEndWalkTime)
             {
+                Crigid.AddForce(Vector2.down * gravityScale*Time.deltaTime);
+            
+                if(Crigid.velocity.y < -MaxDownVelocity)
+                {
                 Crigid.velocity = new Vector2(Crigid.velocity.x,-MaxDownVelocity);
+                }
+            }
+        }
+        else if(State ==STATE.STAND){
+            if(bOnWall)
+            {
+                Crigid.AddForce(Vector2.down * gravityScale*Time.deltaTime);
+            
+                if(Crigid.velocity.y < -MaxDownVelocity)
+                {
+                Crigid.velocity = new Vector2(Crigid.velocity.x,-MaxDownVelocity);
+                }
             }
         }
         
+        
     }
 
+    protected virtual void OnTriggerStay2D(Collider2D other) 
+    {
+        if (other.transform.tag == Tags.Floor)
+        {
+            bOnFloor=true;
+        }
+    }
     protected virtual void OnCollisionEnter2D(Collision2D other) 
     {
 
@@ -224,6 +256,7 @@ public partial class PlayerAbleCharacter : CharacterBased
         }
         else if (other.transform.tag == Tags.Floor)
         {
+            bOnFloor=true;
             State = STATE.STAND;
             ReSetJumpCount();
             if(WaitJumpBuffer)
@@ -238,11 +271,14 @@ public partial class PlayerAbleCharacter : CharacterBased
     protected virtual void OnCollisionExit2D(Collision2D other)
     {
         
-        if (other.transform.tag == Tags.Floor 
-        &&State==STATE.STAND)
+        if (other.transform.tag == Tags.Floor)
         {
+            bOnFloor=false;
+            if(State==STATE.STAND)
+            {
             State= STATE.FLOAT;
             JumpCount.Val--;
+            }
         }
         else if (other.transform.tag == Tags.Wall)
         {
@@ -345,7 +381,7 @@ public partial class PlayerAbleCharacter: CharacterBased
     {
         
         float MoveX = Input.GetAxisRaw(AXIS.Horizontal) * body.WalkSpeed;
-        if(WaitWalk)
+        if(WaitWalk && !Holding)
         {
             if(bOnWall)
                 MoveToForceX(MoveX);
@@ -436,17 +472,30 @@ public partial class PlayerAbleCharacter: CharacterBased
 
 
 
-
-
+    public virtual void lookup_relase()
+    {
+            Holding=false;
+            Manager.MoveCam.Inst.LookUp = false;
+    }
+    public virtual void lookdown_relase()
+    {
+            Holding=false;
+            Manager.MoveCam.Inst.LookDown = false;
+    }
 
     public virtual void lookup()
     {
             action = ACTION.LOOK_UP;
+            Holding=true;
+            Crigid.velocity = new Vector2(0,Crigid.velocity.y);
     }
     public virtual void lookdown()
     {
             action = ACTION.LOOK_DOWN;
+            Holding=true;
+            Crigid.velocity = new Vector2(0,Crigid.velocity.y);
     }
+
 
     protected virtual void EndMotion()
     {

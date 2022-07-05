@@ -5,7 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public struct MulitInfo
 {
+    [Range(0,1)]
     public float X;
+    [Range(0,1)]
     public float Y;
 }
 public class MultiLayers : MonoBehaviour
