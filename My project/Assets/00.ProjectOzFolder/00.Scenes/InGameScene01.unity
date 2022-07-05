@@ -9813,6 +9813,11 @@ MonoBehaviour:
   EnableT: 0
   LookUp: 0
   LookDown: 0
+  OnDelay: 0
+  DelayView:
+    Max: 0.79
+    Min: 0
+    Val: 0
 --- !u!4 &1583750823
 Transform:
   m_ObjectHideFlags: 0

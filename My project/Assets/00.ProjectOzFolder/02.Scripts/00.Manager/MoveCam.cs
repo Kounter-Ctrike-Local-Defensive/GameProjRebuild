@@ -46,7 +46,9 @@ namespace Manager
 
         public bool LookUp;
         public bool LookDown;
+        public bool OnDelay;
         
+        public Gauge DelayView;
 
         void Start()
         {
@@ -56,7 +58,15 @@ namespace Manager
             EnableT = true;
             PlayerLookVec =0;
         }
-
+        public void startDelay()
+        {
+            OnDelay=true;
+        }
+        public void RelaseDelay()
+        {
+            OnDelay=false;
+            DelayView.Val = DelayView.Max;
+        }
         void Update()
         {
             ColliderToCamera.transform.localPosition = new Vector3(CameraMarginPosX, CameraMarginPosY, 0);
@@ -68,6 +78,10 @@ namespace Manager
 
             C_Camera.transform.localPosition = new Vector3(C_Camera.transform.localPosition.x,PlayerLookVec,C_Camera.transform.localPosition.z);
 
+            if(OnDelay)
+            {
+                DelayView.Val -= Time.deltaTime;
+            }
         }
 
 
@@ -122,6 +136,8 @@ namespace Manager
 
         void MoveToCameraActionPlayer()
         {
+        if(DelayView.Val <0)
+        {
             if(LookUp)
             {
                 if(PlayerLookVec< MaxLookDownDistance)
@@ -144,7 +160,9 @@ namespace Manager
                         LookDown=false;
                         
         }
-        else
+        }
+
+        if(!LookDown && !LookUp)
         {
             if(PlayerLookVec> 0.05)
             {
@@ -160,8 +178,10 @@ namespace Manager
             }
 
         }
+
         }
 
+        
         
 
     }

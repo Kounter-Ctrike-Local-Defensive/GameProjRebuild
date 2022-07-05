@@ -474,13 +474,16 @@ public partial class PlayerAbleCharacter: CharacterBased
 
     public virtual void lookup_relase()
     {
+            
             Holding=false;
             Manager.MoveCam.Inst.LookUp = false;
+            Manager.MoveCam.Inst.RelaseDelay();
     }
     public virtual void lookdown_relase()
     {
             Holding=false;
             Manager.MoveCam.Inst.LookDown = false;
+            Manager.MoveCam.Inst.RelaseDelay();
     }
 
     public virtual void lookup()
@@ -488,12 +491,14 @@ public partial class PlayerAbleCharacter: CharacterBased
             action = ACTION.LOOK_UP;
             Holding=true;
             Crigid.velocity = new Vector2(0,Crigid.velocity.y);
+            Manager.MoveCam.Inst.startDelay();
     }
     public virtual void lookdown()
     {
             action = ACTION.LOOK_DOWN;
             Holding=true;
             Crigid.velocity = new Vector2(0,Crigid.velocity.y);
+            Manager.MoveCam.Inst.startDelay();
     }
 
 
